@@ -18,7 +18,7 @@ class KeyValue : IStressProfile {
 
 
     override fun prepare(session: Session) {
-        insert = session.prepare("INSERT INTO keyvalue (key, value, keyvalue) VALUES (?, ?)")
+        insert = session.prepare("INSERT INTO keyvalue (key, value) VALUES (?, ?)")
         select = session.prepare("SELECT * from keyvalue WHERE key = ? and value = ?")
         delete = session.prepare("DELETE from keyvalue WHERE key = ? and value = ?")
     }
