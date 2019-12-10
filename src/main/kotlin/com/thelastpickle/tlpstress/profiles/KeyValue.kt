@@ -18,7 +18,7 @@ class KeyValue : IStressProfile {
 
 
     override fun prepare(session: Session) {
-        insert = session.prepare("INSERT INTO keyvalue (key, value) VALUES (?, ?)")
+        insert = session.prepare("INSERT INTO keyvalue (key, value, keyvalue) VALUES (?, ?, ?)")
         select = session.prepare("SELECT * from keyvalue WHERE key = ? and value = ?")
         delete = session.prepare("DELETE from keyvalue WHERE key = ? and value = ?")
     }
@@ -27,6 +27,7 @@ class KeyValue : IStressProfile {
         val table = """CREATE TABLE IF NOT EXISTS keyvalue (
                         key text,
                         value text,
+                        keyvalue text,
                         PRIMARY KEY (key, value)
                         )""".trimIndent()
         return listOf(table)
@@ -52,7 +53,7 @@ class KeyValue : IStressProfile {
             override fun getNextMutation(partitionKey: PartitionKey): Operation {
                 val data = value.getText()
                 //val bound = insert.bind(partitionKey.getText(),  data)
-                val bound = insert.bind("foo",  data)
+                val bound = insert.bind("foo",  data, "foo$data")
 
                 return Operation.Mutation(bound)
             }
